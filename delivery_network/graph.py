@@ -17,6 +17,8 @@ class Graph:
         return output
     
     def add_edge(self, node1, node2, power_min, dist=1):
+
+
         """
         Adds an edge to the graph. Graphs are not oriented, hence an edge is added to the adjacency list of both end nodes. 
 
@@ -30,7 +32,10 @@ class Graph:
             Minimum power on this edge
         dist: numeric (int or float), optional
             Distance between node1 and node2 on the edge. Default is 1.
-        """
+                    """
+       
+        self.graph[node1].append((node2, power_min))
+        self.graph[node2].append((node1, power_min))
         raise NotImplementedError
     
 
@@ -76,4 +81,23 @@ def graph_from_file(filename):
     G: Graph
         An object of the class Graph with the graph from file_name.
     """
+    with open (filename, "r") as f :
+        ttes_lignes = f.readlines()
+        L0 = L[0]
+        donnees = L0.split(" ")
+        nb_nodes = int(donnees[0])
+        nb_aretes = (donnees[1])
+        G = Graph((range(nb_nodes)))
+        for ligne in ttes_lignes[1:] : 
+            elements = ligne.split(" ")
+            node1 = int(elements[0])
+            node2 = int(elements[1])
+            power_min=int(elements[2])
+            G.add_edge(node1, node2, power_min)
+
+return G
+
+
     raise NotImplementedError
+
+
