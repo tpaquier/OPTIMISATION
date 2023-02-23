@@ -36,16 +36,31 @@ class Graph:
        
         self.graph[node1].append((node2, power_min))
         self.graph[node2].append((node1, power_min))
-        raise NotImplementedError
     
 
     def get_path_with_power(self, src, dest, power):
         raise NotImplementedError
-    
 
-    def connected_components(self):
-        raise NotImplementedError
-
+    def dfs(self, node, visites=None) : 
+        if visites is None:
+            visites=[] #on cree une liste vide qui servira de repère pour savoir ce qu'on a visité, si c'est la première fois qu'on utilise la fonction, on aura une liste sans rien
+            #elle se remplira au fur et à mesure des itérations
+        if node not in visites : 
+            visites.add(node) #on prend un point
+            for i in self.graph[node] : 
+                a=[]
+                adjacents_i=a.append(i[1]) #on crée une liste des voisins, des sommets connectés au dernier en date 
+                for j in adjacents_i : 
+                    node=j
+                    self.dfs(self, node) #et on applique à nouveau la fonction pour qu'elle visite tous les voisins des voisins etc...
+        return visites    
+    def connected_components(self, node) :
+        gde_liste=[]
+        for i in self.graph : 
+            if self.dfs(i) not in any(element for element in gde_liste) : 
+                gde_liste.append(self.dfs(i))
+        return gde_liste
+        
 
     def connected_components_set(self):
         """
@@ -60,44 +75,25 @@ class Graph:
         """
         raise NotImplementedError
 
-
 def graph_from_file(filename):
-    """
-    Reads a text file and returns the graph as an object of the Graph class.
-
-    The file should have the following format: 
-        The first line of the file is 'n m'
-        The next m lines have 'node1 node2 power_min dist' or 'node1 node2 power_min' (if dist is missing, it will be set to 1 by default)
-        The nodes (node1, node2) should be named 1..n
-        All values are integers.
-
-    Parameters: 
-    -----------
-    filename: str
-        The name of the file
-
-    Outputs: 
-    -----------
-    G: Graph
-        An object of the class Graph with the graph from file_name.
-    """
-    with open (filename, "r") as f :
-        ttes_lignes = f.readlines()
-        L0 = L[0]
-        donnees = L0.split(" ")
-        nb_nodes = int(donnees[0])
-        nb_aretes = (donnees[1])
-        G = Graph((range(nb_nodes)))
-        for ligne in ttes_lignes[1:] : 
-            elements = ligne.split(" ")
-            node1 = int(elements[0])
-            node2 = int(elements[1])
-            power_min=int(elements[2])
-            G.add_edge(node1, node2, power_min)
-
-return G
+    file = open(filename, 'r')
+    dist=1
+    #First line is read in order to properly intialize our graph
+    line_1 = file.readline().split(' ')
+    new_graph = Graph([node for node in range(1,int(line_1[0])+1)])
+    new_graph.nb_edges = int(line_1[1].strip('\n'))
+    #Then, all lines are read to create a new edge for each line
+    for line in file:
+        list_line = line.split(' ')
+        if list_line == []:
+            continue
+        if len(list_line) == 4:
+            #In the case where a distance is included
+            dist = int(list_line[3])
+        new_graph.add_edge(int(list_line[0]), int(list_line[1]), int(list_line[2]),dist)
+    file.close()
+    return new_graph
 
 
-    raise NotImplementedError
 
 
