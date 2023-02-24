@@ -34,46 +34,51 @@ class Graph:
             Distance between node1 and node2 on the edge. Default is 1.
                     """
        
-        self.graph[node1].append((node2, power_min))
-        self.graph[node2].append((node1, power_min))
+        self.graph[node1].append((node2, power_min, dist))
+        self.graph[node2].append((node1, power_min, dist))
     
 
     def get_path_with_power(self, src, dest, power):
         raise NotImplementedError
 
-    def dfs(self, node, visites=None) : 
-        if visites is None:
-            visites=[] #on cree une liste vide qui servira de repère pour savoir ce qu'on a visité, si c'est la première fois qu'on utilise la fonction, on aura une liste sans rien
-            #elle se remplira au fur et à mesure des itérations
-        if node not in visites : 
-            visites.add(node) #on prend un point
-            for i in self.graph[node] : 
-                a=[]
-                adjacents_i=a.append(i[1]) #on crée une liste des voisins, des sommets connectés au dernier en date 
-                for j in adjacents_i : 
-                    node=j
-                    self.dfs(self, node) #et on applique à nouveau la fonction pour qu'elle visite tous les voisins des voisins etc...
-        return visites    
-    def connected_components(self, node) :
+    def dfs(self, node, visites=[], composantes=[]) :  
+        visites.append(node) 
+#on prend un point
+        composantes.append(node)
+        for i in self.graph[node] : 
+            if i[0] not in visites :
+                self.dfs(i[0], visites, composantes)  
+                
+#et on applique à nouveau la fonction pour qu elle visite tous les voisins des voisins etc...   
+
+
+    def connected_components(self) :
+        visites=[]
         gde_liste=[]
-        for i in self.graph : 
-            if self.dfs(i) not in any(element for element in gde_liste) : 
-                gde_liste.append(self.dfs(i))
+        for i in self.graph:
+            if i not in visites :
+                composantes=[]
+                self.dfs(i, visites, composantes)
+                gde_liste.append(composantes)
         return gde_liste
         
 
     def connected_components_set(self):
+
+
         """
         The result should be a set of frozensets (one per component), 
         For instance, for network01.in: {frozenset({1, 2, 3}), frozenset({4, 5, 6, 7})}
         """
         return set(map(frozenset, self.connected_components()))
     
+    '''
     def min_power(self, src, dest):
         """
         Should return path, min_power. 
         """
         raise NotImplementedError
+        '''
 
 def graph_from_file(filename):
     file = open(filename, 'r')
@@ -91,9 +96,6 @@ def graph_from_file(filename):
             #In the case where a distance is included
             dist = int(list_line[3])
         new_graph.add_edge(int(list_line[0]), int(list_line[1]), int(list_line[2]),dist)
+    print(new_graph.graph)
     file.close()
     return new_graph
-
-
-
-
