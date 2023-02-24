@@ -62,6 +62,18 @@ class Graph:
                 gde_liste.append(composantes)
         return gde_liste
         
+    def bfs(self, beg, dest, ancetres=[], queue=[], puissance):
+        ancetres.append(beg)
+        queue.append(beg)
+        while len(queue)>0 or dest in queue : 
+            n=queue.pop()
+            
+
+
+
+
+
+
 
     def connected_components_set(self):
 
@@ -99,3 +111,4 @@ def graph_from_file(filename):
     print(new_graph.graph)
     file.close()
     return new_graph
+
