@@ -39,7 +39,23 @@ class Graph:
     
 
     def get_path_with_power(self, src, dest, power):
-        raise NotImplementedError
+        ancetres = self.bfs(src, dest)
+        for i in ancetres:
+            infos = self.graph[i]
+            for v in infos : 
+                if v[3]>power : 
+                    print("None")
+                if v[3]<=power : 
+                    print("Le chemin avec une puissance de "+power+" entre "+src+" et "+dest+" est : "+ancetres)
+
+
+
+
+
+
+
+
+
 
     def dfs(self, node, visites=[], composantes=[]) :  
         visites.append(node) 
@@ -62,12 +78,20 @@ class Graph:
                 gde_liste.append(composantes)
         return gde_liste
         
-    def bfs(self, beg, dest, ancetres=[], queue=[], puissance):
+    def bfs(self, beg, dest):
+        ancetres=[]
+        queue=[]
         ancetres.append(beg)
         queue.append(beg)
-        while len(queue)>0 or dest in queue : 
-            n=queue.pop()
-            
+        while len(queue)>0 or dest in queue:
+            n = queue.pop()
+            for v in self.graph[n]:
+                if v[0] not in ancetres:
+                    queue.append(v[0])
+                    ancetres.append(v[0])
+        return ancetres
+
+
 
 
 
