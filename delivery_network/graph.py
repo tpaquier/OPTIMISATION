@@ -44,17 +44,9 @@ class Graph:
             infos = self.graph[i]
             for v in infos : 
                 if v[3]>power : 
-                    print("None")
+                    return None
                 if v[3]<=power : 
-                    print("Le chemin avec une puissance de "+power+" entre "+src+" et "+dest+" est : "+ancetres)
-
-
-
-
-
-
-
-
+                    return ancetres
 
 
     def dfs(self, node, visites=[], composantes=[]) :  
@@ -66,7 +58,6 @@ class Graph:
                 self.dfs(i[0], visites, composantes)  
                 
 #et on applique à nouveau la fonction pour qu elle visite tous les voisins des voisins etc...   
-
 
     def connected_components(self) :
         visites=[]
@@ -90,6 +81,26 @@ class Graph:
                     queue.append(v[0])
                     ancetres.append(v[0])
         return ancetres
+
+
+
+    def power_nodes(self, node1, node2):
+        liste=self.graph[node1]
+        for i in liste :
+
+            if i[1] = node2 :
+                power = i[3]
+        return power
+            
+
+
+    def min_power(self, src, end):
+        liste=self.bfs(src, end)
+        power=[]
+        for i in liste:
+            power.append(self.power_nodes(i,i+1))
+        petiot=self.minimum(power)
+        return petiot
 
 
 
@@ -135,4 +146,16 @@ def graph_from_file(filename):
     print(new_graph.graph)
     file.close()
     return new_graph
+
+
+
+
+def minimum(self, liste):
+    min = 0
+    for i in liste:
+        if i <= min:
+            min=i
+        if i > min:
+            min=min
+    return min
 
