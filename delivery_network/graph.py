@@ -42,19 +42,45 @@ class Graph:
     
 
     def get_path_with_power(self, src, dest, power):
-        ancetres = self.bfs(src, dest)
-        for i in ancetres:
-            infos = self.graph[i]
-            for v in infos : 
-                if v[2]>power : 
-                    return None
-                if v[2]<=power : 
-                    return ancetres
+        ancetres = self.bfs(src, dest, power)
+        parcours=[]
+        a=dest
+        if dest not in ancetres:
+            return None
+        while a != src:
+            parcours.append(a)
+            a=ancetres[a]
+            print("dans la boucle", parcours)
+        parcours.append(src)
+        parcours.reverse()
+        print("resultat", parcours)
+        return parcours
+
+        
+
+
+
+
+
+
+
+
+
+
+
+
+        #for i in ancetres:
+            #infos = self.graph[i]
+            #for v in infos : 
+                #if v[2]>power : 
+                    #return None
+                #if v[2]<=power : 
+                    #return ancetres
 
 
     def dfs(self, node, visites=[], composantes=[], power=-1) :  
         visites.append(node) 
-#on prend un point
+    #on prend un point
         composantes.append(node)
         for i in self.graph[node] : 
             if i[0] not in visites and power!=-1:
@@ -74,17 +100,18 @@ class Graph:
                 gde_liste.append(composantes)
         return gde_liste
         
-    def bfs(self, beg, dest):
-        ancetres=[]
+    def bfs(self, beg, dest, power=-1):
+        ancetres={}
         queue=[]
-        ancetres.append(beg)
+        visited=set()
         queue.append(beg)
-        while len(queue)>0 or dest != queue[0]:
+        while len(queue)>0:
             n = queue.pop()
             for v in self.graph[n]:
-                if v[0] not in ancetres:
+                if v[0] not in visited and power>=v[1]:
                     queue.append(v[0])
-                    ancetres.append(v[0])
+                    ancetres[v[0]]=n
+                    visited.add(v[0])
         return ancetres
 
 
