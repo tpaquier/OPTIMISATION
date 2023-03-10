@@ -50,51 +50,27 @@ class Graph:
         while a != src:
             parcours.append(a)
             a=ancetres[a]
-            print("dans la boucle", parcours)
         parcours.append(src)
         parcours.reverse()
-        print("resultat", parcours)
         return parcours
 
-        
 
-
-
-
-
-
-
-
-
-
-
-
-        #for i in ancetres:
-            #infos = self.graph[i]
-            #for v in infos : 
-                #if v[2]>power : 
-                    #return None
-                #if v[2]<=power : 
-                    #return ancetres
-
-
-    def dfs(self, node, visites=[], composantes=[], power=-1) :  
+    def dfs(self, node, visites, composantes, power=1000000000) :  
         visites.append(node) 
     #on prend un point
         composantes.append(node)
         for i in self.graph[node] : 
-            if i[0] not in visites and power!=-1:
-                continue
-                self.dfs(i[0], visites, composantes) 
+            if i[0] not in visites and power >= i[1]:
+                self.dfs(i[0], visites, composantes, power=power) 
         return visites
                 
 #et on applique à nouveau la fonction pour qu elle visite tous les voisins des voisins etc...   
 
     def connected_components(self) :
-        visites=[]
-        gde_liste=[]
+        visites = []
+        gde_liste = []
         for i in self.graph:
-            if i not in visites :
+            if i not in visites:
                 composantes=[]
                 self.dfs(i, visites, composantes)
                 gde_liste.append(composantes)
@@ -108,7 +84,7 @@ class Graph:
         while len(queue)>0:
             n = queue.pop()
             for v in self.graph[n]:
-                if v[0] not in visited and power>=v[1]:
+                if v[0] not in visited and power >=v[1]:
                     queue.append(v[0])
                     ancetres[v[0]]=n
                     visited.add(v[0])
@@ -129,9 +105,6 @@ class Graph:
                 return mid
         return -1 #si on arrive la c est que l element etait po dans la liste
 
-             
-
-
     def power_nodes(self, node1, node2):
         liste=self.graph[node1]
         for i in liste :
@@ -143,18 +116,23 @@ class Graph:
     def min_power(self, src, dest):
         debut=0
         fin=self.max_power
-        if dest not in self.dfs(src):
-            return None
-        while debut != end: 
+
+        if dest not in self.dfs(src, [], []):
+            return None, None
+        while debut != fin: 
+            
             mid = (debut+fin)//2
-            if dest not in self.dfs(src, mid):
-                debut=mid
-            else:
+            actu=self.dfs(src, [], [], power=mid)
+            print("actu", actu)
+            if dest in actu:
+                debut = mid
+            elif dest not in actu:
                 fin=mid
             if fin-debut == 1:
                 fin=debut
         minus=fin
-        print("la plus petiote puissance pour le chemin est : "+minus)
+        return self.get_path_with_power(src, dest, minus), minus
+        #print("la plus petiote puissance pour le chemin est : "+minus)
         #print("le chemin qui marche bien est :"+self.get_path_with_power(src, dest, minus))
 
 
