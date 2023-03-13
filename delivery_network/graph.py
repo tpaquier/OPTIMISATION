@@ -180,19 +180,16 @@ class Graph:
             #"fin" car début serait trop petit. 
         minus=fin
         return self.get_path_with_power(src, dest, minus), minus
+        #en testant cette fonction sur le network.2 avec comme noeuds 1 et 12, voici le résultat obtenu :
+        # ([1, 2, 4, 12], 52761). C'est assez long mais il parvient au résultat sans trop de soucis. 
 
 
-    """
-        def connected_components_set(self):
+
+
+
+    def connected_components_set(self):
         return set(map(frozenset, self.connected_components()))
-    """
-    '''
-    def min_power(self, src, dest):
-        """
-        Should return path, min_power. 
-        """
-        raise NotImplementedError
-        '''
+    
 
 def graph_from_file(filename):
     """
@@ -252,13 +249,3 @@ def minimum(self, liste):
         if i > min:
             min = min
     return min
-
-def connected_components_set(self):
-
-
-        """
-        The result should be a set of frozensets (one per component), 
-        For instance, for network01.in: {frozenset({1, 2, 3}), frozenset({4, 5, 6, 7})}
-        """
-        return set(map(frozenset, self.connected_components()))
-
