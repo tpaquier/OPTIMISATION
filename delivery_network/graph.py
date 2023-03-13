@@ -114,30 +114,27 @@ class Graph:
             
 
     def min_power(self, src, dest):
-        debut=0
-        fin=self.max_power
-
+        debut = 1
+        fin = self.max_power
+        print("la puissance max est",fin)
         if dest not in self.dfs(src, [], []):
             return None, None
         while debut != fin: 
             
-            mid = (debut+fin)//2
+            mid = ((debut+fin)//2)
             actu=self.dfs(src, [], [], power=mid)
+            print("mid",mid)
             print("actu", actu)
             if dest in actu:
-                debut = mid
+                fin = mid
             elif dest not in actu:
-                fin=mid
-            if fin-debut == 1:
-                fin=debut
+                debut=mid
+            if fin-debut == 1 :
+                break
         minus=fin
         return self.get_path_with_power(src, dest, minus), minus
         #print("la plus petiote puissance pour le chemin est : "+minus)
         #print("le chemin qui marche bien est :"+self.get_path_with_power(src, dest, minus))
-
-
-
-
 
 
 
